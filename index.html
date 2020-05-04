@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <title>Weather Dashboard</title>
+
+    <!-- FONT AWESOME -->
+    <link
+      crossorigin="anonymous"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      rel="stylesheet"
+    />
+
+    <!-- Added link to the jQuery Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Bootstrap CDN -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+    <!-- Custom CSS -->
+    <!-- <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/structure.css" />
+    <link rel="stylesheet" href="css/search.css" /> -->
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <header id="header">Weather Dashboard</header>
+
+    <div class="container">
+      <!-- Sidebar left -->
+      <div class="row mt-2">
+        <div class="col-sm-4 border bg-light">
+          <h5 class="mt-2">
+            Search for a City:
+          </h5>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" />
+            <div class="input-group-append">
+              <span
+                class="input-group-text bg-primary text-white"
+                id="basic-addon2"
+                ><i class="fa fa-search"></i
+              ></span>
+            </div>
+          </div>
+          <ul class="list-group">
+            <!-- <li class="list-group-item">Austin</li> -->
+          </ul>
+        </div>
+
+        <!-- Main weather report -->
+        <div class="col-sm-8">
+          <div class="card" style="width: auto;">
+            <div class="card-body">
+              <h5 class="card-title">City</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+              <p class="card-text">
+                Some quick example text to build on the card title and make up
+                the bulk of the card's content.
+              </p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+          </div>
+
+          <!-- Five day forcast -->
+          <p class="mt-2">5-Day Forcast</p>
+
+          <div class="row mt-2">
+
+            <div class="col border bg-primary text-white ml-3 mb-2 pt-2 pb-3 rounded">
+              <t>00/00/0000</t><br>
+              <img src="" alt=""><br>
+              <t>Temp</t><br>
+              <t>Humidity</t>
+            </div>
+            <div class="col border bg-primary text-white ml-3 mb-2 pt-2 pb-3 rounded">
+              <t>00/00/0000</t><br>
+              <img src="" alt=""><br>
+              <t>Temp</t><br>
+              <t>Humidity</t>
+            </div>
+            <div class="col bg-primary text-white ml-3 mb-2 pt-2 pb-3 rounded">
+              <t>00/00/0000</t><br>
+              <img src="" alt=""><br>
+              <t>Temp</t><br>
+              <t>Humidity</t>
+
+            </div>
+            <div class="col bg-primary text-white ml-3 mb-2 pt-2 pb-3 rounded">
+              <t>00/00/0000</t><br>
+              <img src="" alt=""><br>
+              <t>Temp</t><br>
+              <t>Humidity</t>
+
+            </div>
+            <div class="col  bg-primary text-white ml-3 mb-2 pt-2 pb-3 rounded">
+              <t>00/00/0000</t><br>
+              <img src="" alt=""><br>
+              <t>Temp</t><br>
+              <t>Humidity</t>
+
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Javascript -->
+    <script src="./script.js"></script>
+  </body>
+</html>
