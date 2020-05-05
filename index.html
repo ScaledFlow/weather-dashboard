@@ -28,9 +28,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
     <!-- Custom CSS -->
-    <!-- <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/structure.css" />
-    <link rel="stylesheet" href="css/search.css" /> -->
 
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -46,18 +43,20 @@
             Search for a City:
           </h5>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control city-input" />
             <div class="input-group-append">
               <span
                 class="input-group-text bg-primary text-white"
-                id="basic-addon2"
+                id="search-btn"
                 ><i class="fa fa-search"></i
               ></span>
             </div>
+
+            <!-- This section will hold each of the cities searched -->
           </div>
-          <ul class="list-group">
-            <!-- <li class="list-group-item">Austin</li> -->
-          </ul>
+            <ul class="list-group" id="cities-searched-section">
+              <!-- <li class="list-group-item" >Austin</li> -->
+            </ul>
         </div>
 
         <!-- Main weather report -->
