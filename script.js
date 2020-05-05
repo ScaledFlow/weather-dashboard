@@ -1,5 +1,8 @@
 var cities = ["Atlanta", "Minneapolis", "New York"];
 var citiesStored = [];
+var $citiesList = $("<ul>");
+var searchCount = 0;
+var itemCount = 0;
 
 init();
 //pushCity("Denver");
@@ -7,31 +10,12 @@ setLocalStore();
 //getLocalStore();
 //clearLocalStore();
 consoleCity();
-addCityToList();
+// addCityToList();
 //removeLocalStorage();
 
 // clearCities();
 
 function init() {}
-
-function pushCity(city) {
-  cities.push(city);
-  // console.log(cities);
-  consoleCity();
-}
-
-function setLocalStore() {
-  if (cities.length != 0) {
-    // console.log(cities);
-    localStorage.setItem("cities", JSON.stringify(cities));
-  }
-}
-
-function consoleCity() {
-  for (i = cities.length; i > 0; i--) {
-    console.log("cities in revers order = " + cities[i - 1]);
-  }
-}
 
 function removeLocalStorage() {
   localStorage.removeItem("cities");
@@ -41,19 +25,44 @@ function removeLocalStorage() {
 $(document).ready(function () {
   $("#search-btn").on("click", function () {
     var searchCity = $(".city-input").val().trim();
-    console.log("searchCity = " + searchCity);
+    $(".city-input").val("");
     pushCity(searchCity);
     setLocalStore();
     addCityToList(searchCity);
   });
 });
 
+// create ul and add cities searched to sidebar UI
 function addCityToList(city) {
+  if (searchCount === 0) {
+    $citiesList.addClass("list-group");
+    $("#city-list-section").append($citiesList);
+    searchCount++;
+  }
+
+  itemCount++;
   var $cityListItem = $("<li class='search-cities-list'></li>");
   $cityListItem.addClass("list-group-item");
+  $cityListItem.addClass("list-group-city-" + itemCount);
   $cityListItem.text(city);
-  $("#cities-searched-section").append($cityListItem);
-  console.log("addCityToList");
+  $(".list-group").prepend($cityListItem);
+}
+
+function pushCity(city) {
+  cities.push(city);
+  consoleCity();
+}
+
+function setLocalStore() {
+  if (cities.length != 0) {
+    localStorage.setItem("cities", JSON.stringify(cities));
+  }
+}
+
+function consoleCity() {
+  for (i = cities.length; i > 0; i--) {
+    console.log("cities in revers order = " + cities[i - 1]);
+  }
 }
 
 // psuedo code
