@@ -29,7 +29,8 @@
 
     <!-- Custom CSS -->
 
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="assets/style.css" />
+
   </head>
 
   <body>
@@ -61,14 +62,20 @@
         <div class="col-sm-8">
           <div class="card" style="width: auto;">
             <div class="card-body">
-              <h5 class="card-title">City</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
+              <h4 class="card-title" id="main-card-city"></h4>
+              <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+              <p class="card-text" id="main-card-temp">
+                Temperature: 
               </p>
-              <a href="#" class="card-link">Card link</a>
-              <a href="#" class="card-link">Another link</a>
+              <p class="card-text" id="main-card-hum">
+                Humidity: 
+              </p>
+              <p class="card-text" id="main-card-wind">
+                Wind Speed: 
+              </p>
+              <p class="card-text" id="main-card-uv-index">
+                UV Index: 
+              </p>
             </div>
           </div>
 
@@ -117,6 +124,8 @@
     </div>
 
     <!-- Javascript -->
-    <script src="./script.js"></script>
+    <script src="assets/script-date.js"></script>
+    <script src="assets/script.js"></script>
+
   </body>
 </html>
