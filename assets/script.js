@@ -1,3 +1,4 @@
+// Set global variables.
 var cities = [];
 var citiesStored = [];
 var $citiesList = $("<ul>");
@@ -17,10 +18,19 @@ var uniValue = 0;
 //removeLocalStorage();
 // clearCities();
 
+// Call initialization function.
+init();
+
+// Function retrieves cities store in local storage and
+// populates the sidebar with cities search in the past and
+// also populates the main dashboard and five-day forecast with
+// data from the last city searched when a new browser session is started.
 function init() {
   var citiesExist = localStorage.getItem("cities");
+  console.log("cities exist = " + citiesExist);
   if (citiesExist != null) {
     getLocalStore();
+    owAPICall(cities[0]);
     //populateMainDashboard(cities[0]);
     for (i = cities.length; i > 0; i--) {
       buildCitiesSearch(cities[i - 1]);
@@ -38,14 +48,15 @@ $(document).ready(function () {
       setLocalStore();
       buildCitiesSearch(searchCity);
       owAPICall(searchCity);
-      // populateMainDashboard(searchCity);
+      // populateMainDashboard(searchCity);s
     }
   });
 });
 
+// Function calls OpenWeather API to get weather info for a given city.
+// Function also populates the main weather dashboard.
 function owAPICall(city) {
   var queryURL = buildAPIString(city);
-  console.log("this is the result = " + queryURL);
   // $.ajax({
   //   url: queryURL,
   //   method: "GET",
@@ -61,16 +72,12 @@ function owAPICall(city) {
       var tempValue = data["main"]["temp"];
       var cloudValue = data["weather"][0]["main"];
       mainCloudValue = cloudValue;
-      console.log("fetch main cloud value = " + mainCloudValue);
       var descValue = data["weather"][0]["description"];
       var humValue = data["main"]["humidity"];
       var windValue = data["wind"]["speed"];
       latValue = data["coord"]["lat"];
-      console.log("initial get of lat = " + latValue);
       lonValue = data["coord"]["lon"];
-      console.log("initial get of lon = " + lonValue);
       owUVAPICall(latValue, lonValue);
-
       getWeatherIcon(cloudValue);
       $("#main-card-city")
         .empty()
@@ -93,10 +100,6 @@ function owAPICall(city) {
   // owUVAPICall(lonValue, latValue);
 }
 
-function updatePage(openWeather) {
-  console.log("what is this = " + openWeather);
-}
-
 // Past cities search click event.
 $(document).ready(function () {
   $(".list-group-item").on("click", function () {
@@ -114,7 +117,7 @@ $(document).ready(function () {
   });
 });
 
-// Populate city side bar with past searches when application launches
+// Function Populates the city sidebar with past searches when the application launches.
 function buildCitiesSearch(city) {
   if (searchCount === 0 && cities.length != 0) {
     $citiesList.addClass("list-group");
@@ -128,8 +131,12 @@ function buildCitiesSearch(city) {
   $cityListItem.addClass("list-group-city-" + itemCount);
   $cityListItem.text(city);
   $(".list-group").prepend($cityListItem);
+
+  // Populate the 5-Day Forecast section.
+  buildFiveDayString(city);
 }
 
+// Function evaluates the weather description and assigns a font awesome weather icon.
 function getWeatherIcon(weatherMain) {
   switch (weatherMain) {
     case "Rain":
@@ -143,10 +150,12 @@ function getWeatherIcon(weatherMain) {
       break;
 
     default:
-      console.log("You blew it in getWeatherIcon !!!!!!!!!!!!!!");
+      console.log("getWeatherIcon function failed");
   }
 }
 
+// Function calls OpenWeather API with longitude and latitude
+// coordinates to retrieve UV Index data.
 function owUVAPICall(lat, lon) {
   var uvQueryURL = buildUVAPIString(latValue, lonValue);
   fetch(uvQueryURL)
@@ -159,10 +168,12 @@ function owUVAPICall(lat, lon) {
     });
 }
 
+// Function unshifts city to array.
 function unshiftCity(city) {
   cities.unshift(city);
 }
 
+// Function assigns a display color to UV Index on the main dashboard.
 function assingUviColor() {
   var n = "";
   if (uviValue < 3) {
@@ -181,17 +192,16 @@ function assingUviColor() {
   return n;
 }
 
-var cityTest = "Austin";
-console.log("five day string = " + buildFiveDayString(cityTest));
-
+// Function build the OpenWeather API string for a 5-Day forecast and
+// also populates the 5-day forecast section
 function buildFiveDayString(cityTest) {
   var owAPIBase = "https://api.openweathermap.org/data/2.5/forecast?q=";
   var owCity = cityTest;
   var owAppId = "&appid=";
   var owKey = "5d00d98dfc178da12841d9b47f1fcc8f";
-  var combinedForcastAPI = owAPIBase + owCity + owAppId + owKey;
-  console.log("forcast string = " + combinedForcastAPI);
-  var queryURL = combinedForcastAPI;
+  var combinedforecastAPI = owAPIBase + owCity + owAppId + owKey;
+  console.log("forecast string = " + combinedforecastAPI);
+  var queryURL = combinedforecastAPI;
   fetch(queryURL)
     .then((response) => response.json())
     .then((data) => {
@@ -202,24 +212,26 @@ function buildFiveDayString(cityTest) {
       var skyValueDay;
 
       for (i = 0; i < 5; i++) {
-        // Populate five day forcast date
+        // Populate five-day forecast date
         $("#five-day-date-" + (i + 1))
           .empty()
           .append(buildDateIncrement(i + 1));
 
-        // Populate five day forcast temp
+        // Populate five-day forecast temp
         tempValueDay = data["list"][dayIncr]["main"]["temp"];
         $("#five-day-temp-" + (i + 1))
           .empty()
-          .append("Temp: " + kelvinToFahr(tempValueDay));
+          .append(
+            "Temp: " + kelvinToFahr(tempValueDay) + "<span> &#8457</span>"
+          );
 
-        // Populate five day forcast hunidity
+        // Populate five-day forecast hunidity
         humidityValueDay = data["list"][dayIncr]["main"]["humidity"];
         $("#five-day-humidity-" + (i + 1))
           .empty()
-          .append("Humidity: " + humidityValueDay);
+          .append("Humidity: " + humidityValueDay + "<span>&#37</span>");
 
-        // Populate five day forcast cloud cover
+        // Populate five-day forecast cloud cover
         skyValueDay = data["list"][dayIncr]["weather"][0]["main"];
         console.log("five day skyValue = " + skyValueDay);
         getWeatherIcon(skyValueDay);
@@ -228,18 +240,20 @@ function buildFiveDayString(cityTest) {
           .empty()
           .append(weatherIcon);
 
-        // Increment through the API where 8 equals a 24 hour period
+        // Increment through the API where 8 added to the counter equals a 24 hour.
         dayIncr = dayIncr + 8;
       }
     });
 }
 
+// Function converst Kelvin to fahrenheit
 function kelvinToFahr(temp) {
   var n = ((temp - 273.15) * 9) / 5 + 32;
   n = Math.floor(n);
   return n;
 }
 
+// Function builds the OpenWeather API request string to UV index.
 function buildUVAPIString(lat, lon) {
   var owAPIBase = "https://api.openweathermap.org/data/2.5/onecall?";
   var latPre = "lat=";
@@ -252,6 +266,8 @@ function buildUVAPIString(lat, lon) {
   return combinedUVAPI;
 }
 
+// Functions builds the OpenWeather API request string to retrieve
+// temp, humidity, wind speed data.
 function buildAPIString(city) {
   var owAPIBase = "https://api.openweathermap.org/data/2.5/weather?q=";
   var country = ",us";
@@ -261,43 +277,38 @@ function buildAPIString(city) {
   return combinedAPI;
 }
 
+// Function saves the cities searched to local storage
 function setLocalStore() {
   if (cities.length != 0) {
     localStorage.setItem("cities", JSON.stringify(cities));
   }
 }
 
+// Function retrieves the cities that have been searched form local storage
 function getLocalStore() {
   var citiesRetrieval = localStorage.getItem("cities");
   var citiesRetrieved = JSON.parse(citiesRetrieval);
   cities = citiesRetrieved;
 }
 
-function consoleCity() {
-  for (i = cities.length; i > 0; i--) {}
-}
-
-buildDate();
-
+// Function builds date string for today in the format mm/dd/year
 function buildDate() {
   var n = getNumMonth() + "/" + getNumDay() + "/" + getYear();
   return n;
 }
 
-var incrementResult = buildDateIncrement(5);
-{
-  console.log("increment resulte = " + incrementResult);
-}
-
+//Function builds date string for today or a future date in the format mm/dd/year
 function buildDateIncrement(count) {
   var dayIncrement = getNumDay() + count;
-  console.log("incremented day = " + dayIncrement);
-
   var n = getNumMonth() + "/" + dayIncrement + "/" + getYear();
-  console.log("(" + getNumMonth() + "/" + getNumDay() + "/" + getYear() + ")");
   return n;
 }
 
+// Functions below are used for testing only
 function removeLocalStorage() {
   localStorage.removeItem("cities");
+}
+
+function consoleCity() {
+  for (i = cities.length; i > 0; i--) {}
 }

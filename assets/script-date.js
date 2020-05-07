@@ -17,7 +17,7 @@ function getMonth() {
   var n = month[d.getMonth()];
   return n;
 }
-
+// Get the numeric month of the year
 function getNumMonth() {
   var d = new Date();
   var n = d.getMonth();
