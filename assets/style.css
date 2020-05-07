@@ -9,6 +9,11 @@ t {
   font-size: 12px;
 }
 
+sk {
+  padding: 2px;
+  margin-top: 6px;
+}
+
 .uv-index-low {
   background-color: green;
   color: white;
@@ -17,8 +22,8 @@ t {
 }
 
 .uv-index-moderate {
-  background-color: #cccc00;
-  color: white;
+  background-color: yellow;
+  color: black;
   border-radius: 4px;
   padding: 4px;
 }

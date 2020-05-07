@@ -38,7 +38,6 @@ $(document).ready(function () {
       setLocalStore();
       buildCitiesSearch(searchCity);
       owAPICall(searchCity);
-
       // populateMainDashboard(searchCity);
     }
   });
@@ -75,7 +74,7 @@ function owAPICall(city) {
       getWeatherIcon(cloudValue);
       $("#main-card-city")
         .empty()
-        .append(city + " " + buildDate() + " " + weatherIcon);
+        .append(city + " " + "(" + buildDate() + ")" + " " + weatherIcon);
       $("#main-card-temp")
         .empty()
         .append("Temperature: " + tempValue + "<span> &#8457</span>");
@@ -132,21 +131,15 @@ function buildCitiesSearch(city) {
 }
 
 function getWeatherIcon(weatherMain) {
-  console.log("value of weatherMain in getweather = " + weatherMain);
-
   switch (weatherMain) {
     case "Rain":
       weatherIcon = '<i class="fas fa-cloud-showers-heavy"></i>';
-      console.log("*****Rain******");
       break;
     case "Clouds":
       weatherIcon = '<i class="fas fa-cloud"></i>';
-      console.log("*****Clouds******");
       break;
     case "Clear":
       weatherIcon = '<i class="fas fa-sun"></i>';
-      console.log("*****Clear******");
-      console.log("weather Icon = " + weatherIcon);
       break;
 
     default:
@@ -156,17 +149,11 @@ function getWeatherIcon(weatherMain) {
 
 function owUVAPICall(lat, lon) {
   var uvQueryURL = buildUVAPIString(latValue, lonValue);
-  console.log("owUVAPICall lat = " + latValue);
-  console.log("owUVAPICall lon = " + lonValue);
-
-  // var uvQueryURL = buildUVAPIString(lat, lon);
   fetch(uvQueryURL)
     .then((response) => response.json())
     .then((data) => {
       var nameValue = data["current"];
       uviValue = data["current"]["uvi"];
-      console.log("uvi value = " + uviValue);
-      console.log("get the uv color code = " + assingUviColor(uviValue));
       $("#main-card-uv-index").attr({ class: assingUviColor() });
       $("#main-card-uv-index").empty().append(uviValue);
     });
@@ -178,8 +165,6 @@ function unshiftCity(city) {
 
 function assingUviColor() {
   var n = "";
-  console.log("type of for uviValue = " + typeof uviValue);
-  console.log("value for uviValue = " + uviValue);
   if (uviValue < 3) {
     n = "uv-index-low";
   } else {
@@ -196,6 +181,65 @@ function assingUviColor() {
   return n;
 }
 
+var cityTest = "Austin";
+console.log("five day string = " + buildFiveDayString(cityTest));
+
+function buildFiveDayString(cityTest) {
+  var owAPIBase = "https://api.openweathermap.org/data/2.5/forecast?q=";
+  var owCity = cityTest;
+  var owAppId = "&appid=";
+  var owKey = "5d00d98dfc178da12841d9b47f1fcc8f";
+  var combinedForcastAPI = owAPIBase + owCity + owAppId + owKey;
+  console.log("forcast string = " + combinedForcastAPI);
+  var queryURL = combinedForcastAPI;
+  fetch(queryURL)
+    .then((response) => response.json())
+    .then((data) => {
+      // Increment values in the API array (6, 14, 22, 30, 38)
+      var dayIncr = 6;
+      var tempValueDay;
+      var humidityValueDay;
+      var skyValueDay;
+
+      for (i = 0; i < 5; i++) {
+        // Populate five day forcast date
+        $("#five-day-date-" + (i + 1))
+          .empty()
+          .append(buildDateIncrement(i + 1));
+
+        // Populate five day forcast temp
+        tempValueDay = data["list"][dayIncr]["main"]["temp"];
+        $("#five-day-temp-" + (i + 1))
+          .empty()
+          .append("Temp: " + kelvinToFahr(tempValueDay));
+
+        // Populate five day forcast hunidity
+        humidityValueDay = data["list"][dayIncr]["main"]["humidity"];
+        $("#five-day-humidity-" + (i + 1))
+          .empty()
+          .append("Humidity: " + humidityValueDay);
+
+        // Populate five day forcast cloud cover
+        skyValueDay = data["list"][dayIncr]["weather"][0]["main"];
+        console.log("five day skyValue = " + skyValueDay);
+        getWeatherIcon(skyValueDay);
+        console.log("five day skyValue icon = " + weatherIcon);
+        $("#five-day-sky-" + (i + 1))
+          .empty()
+          .append(weatherIcon);
+
+        // Increment through the API where 8 equals a 24 hour period
+        dayIncr = dayIncr + 8;
+      }
+    });
+}
+
+function kelvinToFahr(temp) {
+  var n = ((temp - 273.15) * 9) / 5 + 32;
+  n = Math.floor(n);
+  return n;
+}
+
 function buildUVAPIString(lat, lon) {
   var owAPIBase = "https://api.openweathermap.org/data/2.5/onecall?";
   var latPre = "lat=";
@@ -205,8 +249,6 @@ function buildUVAPIString(lat, lon) {
   var owKey = "5d00d98dfc178da12841d9b47f1fcc8f";
   var combinedUVAPI =
     owAPIBase + latPre + lat + lotPre + lon + exclude + appID + owKey;
-  console.log(combinedUVAPI);
-
   return combinedUVAPI;
 }
 
@@ -216,7 +258,6 @@ function buildAPIString(city) {
   var owUnits = "&units=imperial";
   var owKey = "&appid=5d00d98dfc178da12841d9b47f1fcc8f";
   var combinedAPI = owAPIBase + city + country + owUnits + owKey;
-  console.log(combinedAPI);
   return combinedAPI;
 }
 
@@ -233,15 +274,26 @@ function getLocalStore() {
 }
 
 function consoleCity() {
-  for (i = cities.length; i > 0; i--) {
-    console.log("cities in revers order = " + cities[i - 1]);
-  }
+  for (i = cities.length; i > 0; i--) {}
 }
 
 buildDate();
 
 function buildDate() {
-  var n = "(" + getNumMonth() + "/" + getNumDay() + "/" + getYear() + ")";
+  var n = getNumMonth() + "/" + getNumDay() + "/" + getYear();
+  return n;
+}
+
+var incrementResult = buildDateIncrement(5);
+{
+  console.log("increment resulte = " + incrementResult);
+}
+
+function buildDateIncrement(count) {
+  var dayIncrement = getNumDay() + count;
+  console.log("incremented day = " + dayIncrement);
+
+  var n = getNumMonth() + "/" + dayIncrement + "/" + getYear();
   console.log("(" + getNumMonth() + "/" + getNumDay() + "/" + getYear() + ")");
   return n;
 }
