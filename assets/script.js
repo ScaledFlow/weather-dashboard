@@ -1,4 +1,3 @@
-// var cities = ["Atlanta", "Minneapolis", "New York"];
 var cities = [];
 var citiesStored = [];
 var $citiesList = $("<ul>");
@@ -7,6 +6,8 @@ var itemCount = 0;
 var blankCity = "";
 var mainCloudValue = "";
 var weatherIcon = "";
+var latValue = 0;
+var lonValue = 0;
 
 // commented out lines for testing purposes
 //setLocalStore();
@@ -14,19 +15,6 @@ var weatherIcon = "";
 //clearLocalStore();
 //removeLocalStorage();
 // clearCities();
-
-// var result = buildAPIString("minneapolis");
-// console.log("this is the result = " + result);
-
-function buildAPIString(city) {
-  var owAPIBase = "api.openweathermap.org/data/2.5/weather?q=";
-  var owUnits = "&units=imperial";
-  var owKey = "&appid=5d00d98dfc178da12841d9b47f1fcc8f";
-  var combinedAPI = owAPIBase + city + owUnits + owKey;
-  return combinedAPI;
-}
-
-init();
 
 function init() {
   var citiesExist = localStorage.getItem("cities");
@@ -49,6 +37,7 @@ $(document).ready(function () {
       setLocalStore();
       buildCitiesSearch(searchCity);
       owAPICall(searchCity);
+
       // populateMainDashboard(searchCity);
     }
   });
@@ -76,8 +65,11 @@ function owAPICall(city) {
       var descValue = data["weather"][0]["description"];
       var humValue = data["main"]["humidity"];
       var windValue = data["wind"]["speed"];
-      var latValue = data["coord"]["lat"];
-      var lonValue = data["coord"]["lon"];
+      latValue = data["coord"]["lat"];
+      console.log("initial get of lat = " + latValue);
+      lonValue = data["coord"]["lon"];
+      console.log("initial get of lon = " + lonValue);
+      owUVAPICall(latValue, lonValue);
 
       getWeatherIcon(cloudValue);
       $("#main-card-city")
@@ -92,12 +84,13 @@ function owAPICall(city) {
       $("#main-card-wind")
         .empty()
         .append("Wind Speed: " + windValue + "<span> MPH</span>");
-      $("#main-card-uv-index")
-        .empty()
-        .append("UV Index: " + tempValue + "<span> &#8457</span>");
     })
 
     .catch((err) => alert("wrong city name"));
+
+  //owUVAPICall(latValue, lonValue);
+  // first value is lat (small) second value is long (larger)
+  // owUVAPICall(lonValue, latValue);
 }
 
 function updatePage(openWeather) {
@@ -156,14 +149,44 @@ function getWeatherIcon(weatherMain) {
       break;
 
     default:
-      console.lot("You blew it in getWeatherIcon !!!!!!!!!!!!!!");
+      console.log("You blew it in getWeatherIcon !!!!!!!!!!!!!!");
   }
 }
 
-function mainCloudIcon(cloudValue) {}
+function owUVAPICall(lat, lon) {
+  var uvQueryURL = buildUVAPIString(latValue, lonValue);
+  console.log("owUVAPICall lat = " + latValue);
+  console.log("owUVAPICall lon = " + lonValue);
+
+  // var uvQueryURL = buildUVAPIString(lat, lon);
+  fetch(uvQueryURL)
+    .then((response) => response.json())
+    .then((data) => {
+      var nameValue = data["current"];
+      var uviValue = data["current"]["uvi"];
+      console.log("uvi value = " + uviValue);
+      $("#main-card-uv-index")
+        .empty()
+        .append("UV Index: " + uviValue);
+    });
+}
 
 function unshiftCity(city) {
   cities.unshift(city);
+}
+
+function buildUVAPIString(lat, lon) {
+  var owAPIBase = "https://api.openweathermap.org/data/2.5/onecall?";
+  var latPre = "lat=";
+  var lotPre = "&lon=";
+  var exclude = "&exclude=hourly,daily";
+  var appID = "&appid=";
+  var owKey = "5d00d98dfc178da12841d9b47f1fcc8f";
+  var combinedUVAPI =
+    owAPIBase + latPre + lat + lotPre + lon + exclude + appID + owKey;
+  console.log(combinedUVAPI);
+
+  return combinedUVAPI;
 }
 
 function buildAPIString(city) {
@@ -172,6 +195,7 @@ function buildAPIString(city) {
   var owUnits = "&units=imperial";
   var owKey = "&appid=5d00d98dfc178da12841d9b47f1fcc8f";
   var combinedAPI = owAPIBase + city + country + owUnits + owKey;
+  console.log(combinedAPI);
   return combinedAPI;
 }
 
