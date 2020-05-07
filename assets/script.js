@@ -11,13 +11,6 @@ var latValue = 0;
 var lonValue = 0;
 var uniValue = 0;
 
-// commented out lines for testing purposes
-//setLocalStore();
-//getLocalStore();
-//clearLocalStore();
-//removeLocalStorage();
-// clearCities();
-
 // Call initialization function.
 init();
 
@@ -31,7 +24,6 @@ function init() {
   if (citiesExist != null) {
     getLocalStore();
     owAPICall(cities[0]);
-    //populateMainDashboard(cities[0]);
     for (i = cities.length; i > 0; i--) {
       buildCitiesSearch(cities[i - 1]);
     }
@@ -48,7 +40,6 @@ $(document).ready(function () {
       setLocalStore();
       buildCitiesSearch(searchCity);
       owAPICall(searchCity);
-      // populateMainDashboard(searchCity);s
     }
   });
 });
@@ -94,26 +85,17 @@ function owAPICall(city) {
     })
 
     .catch((err) => alert("wrong city name"));
-
-  //owUVAPICall(latValue, lonValue);
-  // first value is lat (small) second value is long (larger)
-  // owUVAPICall(lonValue, latValue);
 }
 
 // Past cities search click event.
 $(document).ready(function () {
-  $(".list-group-item").on("click", function () {
-    // var clickedCity = $(this).val();
-    var clickedCity = $("list-group-city-6").val();
+  $(".search-cities-list").on("click", function () {
+    var clickedCity = $(this).text();
     console.log("clicked city = " + clickedCity);
 
-    // $(".city-input").val("");
-    // if (searchCity != "") {
-    //   unshiftCity(searchCity);
-    //   setLocalStore();
-    //   buildCitiesSearch(searchCity);
-    //   populateMainDashboard(searchCity);
-    // }
+    //buildCitiesSearch(clickedCity);
+    owAPICall(clickedCity);
+    buildFiveDayString(clickedCity);
   });
 });
 
@@ -200,7 +182,6 @@ function buildFiveDayString(cityTest) {
   var owAppId = "&appid=";
   var owKey = "5d00d98dfc178da12841d9b47f1fcc8f";
   var combinedforecastAPI = owAPIBase + owCity + owAppId + owKey;
-  console.log("forecast string = " + combinedforecastAPI);
   var queryURL = combinedforecastAPI;
   fetch(queryURL)
     .then((response) => response.json())
@@ -233,9 +214,7 @@ function buildFiveDayString(cityTest) {
 
         // Populate five-day forecast cloud cover
         skyValueDay = data["list"][dayIncr]["weather"][0]["main"];
-        console.log("five day skyValue = " + skyValueDay);
         getWeatherIcon(skyValueDay);
-        console.log("five day skyValue icon = " + weatherIcon);
         $("#five-day-sky-" + (i + 1))
           .empty()
           .append(weatherIcon);
