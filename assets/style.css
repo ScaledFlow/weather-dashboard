@@ -8,3 +8,31 @@ header {
 t {
   font-size: 12px;
 }
+
+.uv-index-low {
+  background-color: green;
+  color: white;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.uv-index-moderate {
+  background-color: #cccc00;
+  color: white;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.uv-index-high {
+  background-color: orange;
+  color: white;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.uv-index-very-high {
+  background-color: #ff3300;
+  color: white;
+  border-radius: 4px;
+  padding: 4px;
+}

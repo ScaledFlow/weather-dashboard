@@ -8,6 +8,7 @@ var mainCloudValue = "";
 var weatherIcon = "";
 var latValue = 0;
 var lonValue = 0;
+var uniValue = 0;
 
 // commented out lines for testing purposes
 //setLocalStore();
@@ -163,16 +164,36 @@ function owUVAPICall(lat, lon) {
     .then((response) => response.json())
     .then((data) => {
       var nameValue = data["current"];
-      var uviValue = data["current"]["uvi"];
+      uviValue = data["current"]["uvi"];
       console.log("uvi value = " + uviValue);
-      $("#main-card-uv-index")
-        .empty()
-        .append("UV Index: " + uviValue);
+      console.log("get the uv color code = " + assingUviColor(uviValue));
+      $("#main-card-uv-index").attr({ class: assingUviColor() });
+      $("#main-card-uv-index").empty().append(uviValue);
     });
 }
 
 function unshiftCity(city) {
   cities.unshift(city);
+}
+
+function assingUviColor() {
+  var n = "";
+  console.log("type of for uviValue = " + typeof uviValue);
+  console.log("value for uviValue = " + uviValue);
+  if (uviValue < 3) {
+    n = "uv-index-low";
+  } else {
+    if (uviValue > 2 && uviValue < 6) {
+      n = "uv-index-moderate";
+    } else {
+      if (uviValue > 5 && uviValue < 8) {
+        n = "uv-index-high";
+      } else {
+        n = "uv-index-very-high";
+      }
+    }
+  }
+  return n;
 }
 
 function buildUVAPIString(lat, lon) {
