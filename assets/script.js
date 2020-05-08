@@ -20,7 +20,6 @@ init();
 // data from the last city searched when a new browser session is started.
 function init() {
   var citiesExist = localStorage.getItem("cities");
-  console.log("cities exist = " + citiesExist);
   if (citiesExist != null) {
     getLocalStore();
     owAPICall(cities[0]);
@@ -100,7 +99,6 @@ function owAPICall(city) {
 // fix made to support dynamic links
 $("body").on("click", ".search-cities-list", function () {
   var clickedCity = $(this).text();
-  console.log("clicked city fix = " + clickedCity);
 
   //buildCitiesSearch(clickedCity);
   owAPICall(clickedCity);
@@ -295,8 +293,4 @@ function buildDateIncrement(count) {
 // Functions below are used for testing only
 function removeLocalStorage() {
   localStorage.removeItem("cities");
-}
-
-function consoleCity() {
-  for (i = cities.length; i > 0; i--) {}
 }
