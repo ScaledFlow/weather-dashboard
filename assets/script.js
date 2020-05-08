@@ -29,15 +29,17 @@ function init() {
     }
   }
 }
-
+// https://www.youtube.com/watch?v=unk-U_LQWuA
 // Search button click event.
 $(document).ready(function () {
   $("#search-btn").on("click", function () {
     var searchCity = $(".city-input").val().trim();
     $(".city-input").val("");
     if (searchCity != "") {
+      //init();
       unshiftCity(searchCity);
       setLocalStore();
+      //getLocalStore();
       buildCitiesSearch(searchCity);
       owAPICall(searchCity);
     }
@@ -88,16 +90,23 @@ function owAPICall(city) {
 }
 
 // Past cities search click event.
-$(document).ready(function () {
-  $(".search-cities-list").on("click", function () {
-    var clickedCity = $(this).text();
-    console.log("clicked city = " + clickedCity);
 
-    //buildCitiesSearch(clickedCity);
-    owAPICall(clickedCity);
-    buildFiveDayString(clickedCity);
-  });
+// Note - this method does not support dynamic links
+// $(document).ready(function () {
+//   $(".search-cities-list").on("click", function () {
+//     var clickedCity = $(this).text();
+//     console.log("clicked city = " + clickedCity);
+
+// fix made to support dynamic links
+$("body").on("click", ".search-cities-list", function () {
+  var clickedCity = $(this).text();
+  console.log("clicked city fix = " + clickedCity);
+
+  //buildCitiesSearch(clickedCity);
+  owAPICall(clickedCity);
+  buildFiveDayString(clickedCity);
 });
+// });
 
 // Function Populates the city sidebar with past searches when the application launches.
 function buildCitiesSearch(city) {

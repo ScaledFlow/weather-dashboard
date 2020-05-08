@@ -17,26 +17,34 @@ sk {
   background-color: green;
   color: white;
   border-radius: 4px;
-  padding: 4px;
+  padding-bottom: 3px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .uv-index-moderate {
   background-color: yellow;
   color: black;
   border-radius: 4px;
-  padding: 4px;
+  padding-bottom: 3px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .uv-index-high {
   background-color: orange;
   color: white;
   border-radius: 4px;
-  padding: 4px;
+  padding-bottom: 3px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .uv-index-very-high {
   background-color: #ff3300;
   color: white;
   border-radius: 4px;
-  padding: 4px;
+  padding-bottom: 3px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
