@@ -139,7 +139,7 @@ function getWeatherIcon(weatherMain) {
 // Function calls OpenWeather API with longitude and latitude
 // coordinates to retrieve UV Index data.
 function owUVAPICall(lat, lon) {
-  var uvQueryURL = buildUVAPIString(latValue, lonValue);
+  var uvQueryURL = buildUVAPIString(lat, lon);
   fetch(uvQueryURL)
     .then((response) => response.json())
     .then((data) => {
