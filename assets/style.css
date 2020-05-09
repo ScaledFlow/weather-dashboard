@@ -12,6 +12,14 @@ t {
 sk {
   padding: 2px;
 }
+.search-hover {
+  background-color: #007bff;
+  color: white;
+}
+.search-hover:hover {
+  background-color: #1888ff;
+  color: white;
+}
 
 .uv-index-low {
   background-color: green;

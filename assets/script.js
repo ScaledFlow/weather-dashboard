@@ -34,13 +34,25 @@ $(document).ready(function () {
   $("#search-btn").on("click", function () {
     var searchCity = $(".city-input").val().trim();
     $(".city-input").val("");
-    if (searchCity != "") {
-      //init();
-      unshiftCity(searchCity);
-      setLocalStore();
-      //getLocalStore();
-      buildCitiesSearch(searchCity);
-      owAPICall(searchCity);
+
+    var queryURL = buildAPIString(searchCity);
+
+    $.ajax({
+      url: queryURL,
+      method: "GET",
+    })
+      .then(updatePage)
+      .error(function (e) {});
+
+    function updatePage(ajaxData) {
+      var nameValue = ajaxData.name;
+
+      if (searchCity != "") {
+        unshiftCity(searchCity);
+        setLocalStore();
+        buildCitiesSearch(searchCity);
+        owAPICall(searchCity);
+      }
     }
   });
 });
@@ -48,9 +60,10 @@ $(document).ready(function () {
 // Function calls OpenWeather API to get weather info for a given city.
 // Function also populates the main weather dashboard.
 function owAPICall(city) {
-  var queryURL = buildAPIString(city);
+  var fixCity = city.charAt(0).toUpperCase() + city.slice(1);
+  city = fixCity;
 
-  console.log(queryURL);
+  var queryURL = buildAPIString(city);
 
   $.ajax({
     url: queryURL,
@@ -87,7 +100,6 @@ function owAPICall(city) {
 // $(document).ready(function () {
 //   $(".search-cities-list").on("click", function () {
 //     var clickedCity = $(this).text();
-//     console.log("clicked city = " + clickedCity);
 
 // fix made to support dynamic links
 $("body").on("click", ".search-cities-list", function () {
@@ -101,6 +113,9 @@ $("body").on("click", ".search-cities-list", function () {
 
 // Function Populates the city sidebar with past searches when the application launches.
 function buildCitiesSearch(city) {
+  var fixCity = city.charAt(0).toUpperCase() + city.slice(1);
+  city = fixCity;
+
   if (searchCount === 0 && cities.length != 0) {
     $citiesList.addClass("list-group");
     $("#city-list-section").append($citiesList);
