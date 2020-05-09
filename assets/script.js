@@ -49,43 +49,36 @@ $(document).ready(function () {
 // Function also populates the main weather dashboard.
 function owAPICall(city) {
   var queryURL = buildAPIString(city);
-  // $.ajax({
-  //   url: queryURL,
-  //   method: "GET",
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => console.log(data))
-  //   .catch((err) => alert("wrong city name"));
 
-  fetch(queryURL)
-    .then((response) => response.json())
-    .then((data) => {
-      var nameValue = data["name"];
-      var tempValue = data["main"]["temp"];
-      var cloudValue = data["weather"][0]["main"];
-      mainCloudValue = cloudValue;
-      var descValue = data["weather"][0]["description"];
-      var humValue = data["main"]["humidity"];
-      var windValue = data["wind"]["speed"];
-      latValue = data["coord"]["lat"];
-      lonValue = data["coord"]["lon"];
-      owUVAPICall(latValue, lonValue);
-      getWeatherIcon(cloudValue);
-      $("#main-card-city")
-        .empty()
-        .append(city + " " + "(" + buildDate() + ")" + " " + weatherIcon);
-      $("#main-card-temp")
-        .empty()
-        .append("Temperature: " + tempValue + "<span> &#8457</span>");
-      $("#main-card-hum")
-        .empty()
-        .append("Humidity: " + humValue + "<span>&#37</span>");
-      $("#main-card-wind")
-        .empty()
-        .append("Wind Speed: " + windValue + "<span> MPH</span>");
-    })
+  console.log(queryURL);
 
-    .catch((err) => alert("wrong city name"));
+  $.ajax({
+    url: queryURL,
+    method: "GET",
+  }).then(updatePage);
+
+  function updatePage(ajaxData) {
+    var nameValue = ajaxData.name;
+    var cloudValue = ajaxData.weather[0].main;
+    var descValue = ajaxData.weather[0].description;
+    var latValue = ajaxData.coord.lat;
+    var lonValue = ajaxData.coord.lon;
+    owUVAPICall(latValue, lonValue);
+    getWeatherIcon(cloudValue);
+
+    $("#main-card-city")
+      .empty()
+      .append(city + " " + "(" + buildDate() + ")" + " " + weatherIcon);
+    $("#main-card-temp")
+      .empty()
+      .append("Temperature: " + ajaxData.main.temp + "<span> &#8457</span>");
+    $("#main-card-hum")
+      .empty()
+      .append("Humidity: " + ajaxData.main.humidity + "<span>&#37</span>");
+    $("#main-card-wind")
+      .empty()
+      .append("Wind Speed: " + ajaxData.wind.speed + "<span> MPH</span>");
+  }
 }
 
 // Past cities search click event.
